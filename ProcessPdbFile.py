@@ -327,7 +327,7 @@ def to_float(lst):
         new_lst.append(new_num)
     return new_lst
 
-def determine_chain(chain, file1, distance):
+def determine_chain(chain, file1, distance, CDRlst = None):
     big_dict = get_sequence(file1)
     
     if(chain not in big_dict.keys()):
@@ -337,7 +337,14 @@ def determine_chain(chain, file1, distance):
     for d in aminolst:
         sequence = sequence + list(d.keys())[0]
 
-    lst = FindingCDRRegion.find_CDR(sequence)
+    if CDRlst == None:
+        lst = FindingCDRRegion.find_CDR(sequence)
+    else:
+        lst = []
+        for cdr in CDRlst:
+            index = text.find(cdr)
+            lst.append(index)
+            lst.append(index + len(cdr) - 1)
     aminolst = aminolst[lst[0] : lst[1] +1] + aminolst[lst[2] : lst[3] +1] + aminolst[lst[4] : lst[5] +1]
 
 
