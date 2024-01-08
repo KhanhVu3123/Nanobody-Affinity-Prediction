@@ -194,6 +194,32 @@ def retrieve_sequence_from_zippedFile(gzipfile):
 
     return sequences
 
+def retrieve_sequence_of_chain(chain, filename):
+    seq = ""
+    with open(filename, "r") as file:
+        for line in file:
+            this_type = line[:6]
+            this_type = clean(this_type)
+            
+            atom_name = line[13:17]
+            atom_name = clean(atom_name)
+
+            # Line 21 indicates the chain name of the sequence
+            if(line[21] != chain):
+                continue
+            if(this_type== "HETATOM"):
+                break
+            if (this_type == "TER"):
+                break
+                seq = ""
+            if(atom_name != "CA"):
+                continue
+            if(this_type != "ATOM"):
+                continue
+            amino_acid = line[17:20]
+            seq = seq + amino_acid_dict[amino_acid]
+    return seq
+
 def retrieve_sequence(file1):
     sequences = []
     seq = ""
@@ -247,6 +273,7 @@ def coordinate_distance(lst1, lst2):
     for i in range(len(lst1)):
         distance = distance + (lst1[i] - lst2[i]) **2
     return distance
+
 
 
 
