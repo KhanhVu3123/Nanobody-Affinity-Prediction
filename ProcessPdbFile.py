@@ -337,6 +337,9 @@ def determine_chain(chain, file1, distance, CDRlst = None):
     for d in aminolst:
         sequence = sequence + list(d.keys())[0]
 
+    
+    list_of_dict = big_dict[chain]
+    text = "".join([next(iter(d)) for d in list_of_dict]) 
     if CDRlst == None:
         lst = FindingCDRRegion.find_CDR(sequence)
     else:
