@@ -417,7 +417,7 @@ def find_paratope(filename, nano_chain, antigen_chain, CDRlst = None, distance =
     pairing.append(cdr2 + paratope2)
     pairing.append(cdr3 + paratope3)
 
-    return CDRlst,  paratope
+    return paratope, pairing
 
 def determine_chain(chain, file1, distance, CDRlst = None):
     big_dict = get_sequence(file1)
