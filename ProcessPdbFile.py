@@ -354,6 +354,67 @@ def to_float(lst):
         new_lst.append(new_num)
     return new_lst
 
+
+def find_paratope(filename, nano_chain, antigen_chain, CDRlst = None, distance = 8):
+    big_dict = get_sequence(filename)
+   
+    if(nano_chain not in big_dict.keys()):
+        return "Check your data"
+    if(antigen_chain not in big_dict.keys()):
+        return "Check your data"
+   
+    list_of_dict = big_dict[nano_chain]
+    nanobody_seq = "".join([next(iter(d)) for d in list_of_dict])
+    if(CDRlst == None):
+        lst = FindingCDRRegion.find_CDR()
+    else:
+        lst = []
+        for cdr in CDRlst:
+            index = nanobody_seq.find(cdr)
+            lst.append(index)
+            lst.append(index+ len(cdr) -1)
+           
+           
+    nanobody_cdr1_position_lst = list_of_dict[lst[0]: lst[1] +1]
+    nanobody_cdr2_position_lst = list_of_dict[lst[2]: lst[3] +1]
+    nanobody_cdr3_position_lst = list_of_dict[lst[4]: lst[5] +1]
+   
+    cdr1 = nanobody_seq[lst[0]: lst[1] +1]
+    cdr2 = nanobody_seq[lst[2]: lst[3] +1]
+    cdr3 = nanobody_seq[lst[4]: lst[5] +1]
+
+   
+    antigen_position_list = big_dict[antigen_chain]
+   
+    pairing = []
+    paratope1 = ""
+    paratope2 = ""
+    paratope3 = ""
+   
+    # Loop through the position dictionaries of the 3 CDRs one by one
+   
+    for antigen_aminoacid_posdict in antigen_position_list:
+        for cdr1_aminoacid_posdict in nanobody_cdr1_position_lst:
+            if(coordinate_distance(list(antigen_aminoacid_posdict.values())[0], list(cdr1_aminoacid_posdict.values())[0]) < distance):
+                paratope1 = paratope1 + list(antigen_aminoacid_posdict.keys())[0]
+               
+    for antigen_aminoacid_posdict in antigen_position_list:
+        for cdr2_aminoacid_posdict in nanobody_cdr2_position_lst:
+            if(coordinate_distance(list(antigen_aminoacid_posdict.values())[0], list(cdr2_aminoacid_posdict.values())[0]) < distance):
+                paratope2 = paratope2 + list(antigen_aminoacid_posdict.keys())[0]
+               
+    for antigen_aminoacid_posdict in antigen_position_list:
+        for cdr3_aminoacid_posdict in nanobody_cdr3_position_lst:
+            if(coordinate_distance(list(antigen_aminoacid_posdict.values())[0], list(cdr3_aminoacid_posdict.values())[0]) < distance):
+                paratope3 = paratope3 + list(antigen_aminoacid_posdict.keys())[0]
+               
+   
+    pairing.append(cdr1+ paratope1)
+    pairing.append(cdr2 + paratope2)
+    pairing.append(cdr3 + paratope3)
+
+    return pairing
+
 def determine_chain(chain, file1, distance, CDRlst = None):
     big_dict = get_sequence(file1)
     
