@@ -385,7 +385,7 @@ def find_paratope(filename, nano_chain, antigen_chain, CDRlst = None, distance =
 
    
     antigen_position_list = big_dict[antigen_chain]
-   
+
     pairing = []
     paratope1 = ""
     paratope2 = ""
@@ -408,12 +408,16 @@ def find_paratope(filename, nano_chain, antigen_chain, CDRlst = None, distance =
             if(coordinate_distance(list(antigen_aminoacid_posdict.values())[0], list(cdr3_aminoacid_posdict.values())[0]) < distance):
                 paratope3 = paratope3 + list(antigen_aminoacid_posdict.keys())[0]
                
-   
+    paratope = []
+    paratope.append(paratope1)
+    paratope.append(paratope2)
+    paratope.append(paratope3)
+
     pairing.append(cdr1+ paratope1)
     pairing.append(cdr2 + paratope2)
     pairing.append(cdr3 + paratope3)
 
-    return pairing
+    return CDRlst,  paratope
 
 def determine_chain(chain, file1, distance, CDRlst = None):
     big_dict = get_sequence(file1)
