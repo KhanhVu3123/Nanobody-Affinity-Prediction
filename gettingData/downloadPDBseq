@@ -1,0 +1,26 @@
+import urllib.request
+
+def download_pdb_file(pdb_id, save_path = "/home/khanhvu/Desktop/PDBfile/"):
+    url = "https://files.rcsb.org/download/"+pdb_id+".pdb"
+    save_path = save_path + pdb_id+".pdb"
+    try:
+        urllib.request.urlretrieve(url, save_path)
+        print(url)
+
+    except Exception as e:
+        print("URL not found")
+
+
+def read(file1):
+    with open(file1, "r") as file:
+        for line in file:
+            if line.startswith(">"):
+                name = line[1:5]
+                download_pdb_file(name)
+
+
+def main():
+    read("/home/khanhvu/Downloads/seqdump.txt")
+
+if __name__ == "__main__":
+    main()
